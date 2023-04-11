@@ -1,11 +1,33 @@
 import socket
+class Client:
+    def __init__(self, ip, port):
+        self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.client.connect((ip, port))
 
-HOST = "127.0.0.1"
-PORT = 65432
+    def connect(self):
+        try:
+            msg = self.client.recv(1024).decode('utf-8')
+            self.listen()
+        except Exception as e:
+            print(f'ERROR: {str(e)}')
+            exit()
 
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:
-    client_socket.connect((HOST, PORT))
-    client_socket.sendall(b"hello world!")
-    data = client_socket.recv(1024)
+        if msg == 'YOU ARE CONNECTED!':
+            self.listen()
+        else:
+            exit()
 
-print(f"Received {data!r}")
+    def sender(self, user, text):
+        self.client.send(text.encode('utf-8'))
+        while self.client.recv(1024).decode('utf-8') != 'GETTED':
+            self.client.send(text.encode('utf-8'))
+
+    def listen(self):
+        is_work = True
+        while is_work:
+            reqest = input()
+
+            if reqest == 'disconnect':
+                pass
+
+

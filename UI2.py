@@ -16,8 +16,10 @@ class ConsoleUI:
         pass
 
     def _run_curses(self, stdscr):
-        # Initialize curses
+    # Настройка библиотеки
+        # не отображаются вводимые символы
         curses.noecho()
+        # данные напрямую идут в консоль после каждого нажатия
         curses.cbreak()
         stdscr.keypad(True)
         curses.curs_set(0)
@@ -27,7 +29,7 @@ class ConsoleUI:
 
         # Main loop
         while True:
-            # Draw menu options
+            # Меню отрисовки
             stdscr.clear()
             for i, option in enumerate(self.options):
                 if i == self.selected_option:
@@ -37,7 +39,7 @@ class ConsoleUI:
                 stdscr.addstr(i + 1, 1, option)
             stdscr.refresh()
 
-            # Handle user input
+            # Обработка того, что вел пользователь
             key = stdscr.getch()
             if key == ord("w"):
                 self.selected_option = (self.selected_option - 1) % len(self.options)
@@ -45,10 +47,10 @@ class ConsoleUI:
                 self.selected_option = (self.selected_option + 1) % len(self.options)
             elif key == curses.KEY_ENTER or key in [10, 13]:
                 selected = self.options[self.selected_option]
-                # Do something with selected option here
+                # Тут кнопки будут иметь какие то функции
                 break
 
-        # Clean up curses
+        # Заканчиваем работу
         curses.curs_set(1)
         curses.nocbreak()
         stdscr.keypad(False)
