@@ -1,5 +1,8 @@
 import curses
+import socket
 
+HOST = "127.0.0.1"
+PORT = 65432
 
 class ConsoleUI:
     def __init__(self):
@@ -8,6 +11,9 @@ class ConsoleUI:
 
     def run(self):
         curses.wrapper(self._run_curses)
+
+    def send_reqest(self, client_socket, reqest):
+        pass
 
     def _run_curses(self, stdscr):
         # Initialize curses
