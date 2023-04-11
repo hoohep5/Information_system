@@ -1,5 +1,8 @@
 import socket
+
+
 class Client:
+
     def __init__(self, ip, port):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client.connect((ip, port))
@@ -17,8 +20,9 @@ class Client:
         else:
             exit()
 
-    def sender(self, user, text):
+    def sender(self, text):
         self.client.send(text.encode('utf-8'))
+        # пока не получим ответ, что сообщение принято посылаем запрос
         while self.client.recv(1024).decode('utf-8') != 'GETTED':
             self.client.send(text.encode('utf-8'))
 
@@ -28,6 +32,10 @@ class Client:
             reqest = input()
 
             if reqest == 'disconnect':
-                pass
+                self.sender(reqest)
+                print(self.client.recv(1024).decode('utf-8'))
+            else:
+                pass # ответ от сервера на полученный зпрос  |||||||||| походу надо использовать Json :|
+
 
 
