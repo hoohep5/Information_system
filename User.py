@@ -1,7 +1,10 @@
-class DataBase():
-    def __init__(self):
+class User():
+    id = 0
+    login = 0
+    password = 0
+    admin = 0
+    def createUser(self):
         pass
-    def add_cont(self, cont):
+    def deleteUser(self):
         pass
-
-class Container():
+    pass
