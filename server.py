@@ -42,14 +42,17 @@ class Server:
                     database_content = file_database.read()
 
                     try:
-                        # при любом запросе по идее оно будет только записывать папуаса, в будущем надо добавить вариативность
-                        file_database.write('я веселый папуас, выеби меня пять раз')
+                        answer = [x for x in data]
                         error = ''
                     except Exception as e:
                         error = str(e)
+                        answer = ''
                     file_database.close()
                     self.sender(user, database_content)
 
+                    ans = json.dumps({'answer': answer, 'error': error})
+
+                    self.sender(user, ans)
 
             else:
                 print('CLIENT DISCONNECTED')
