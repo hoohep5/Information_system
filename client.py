@@ -1,3 +1,4 @@
+import json
 import socket
 
 
@@ -29,13 +30,20 @@ class Client:
     def listen(self):
         is_work = True
         while is_work:
-            reqest = input()
+            reqest = input('TYPE DATABASE REQUEST:')
 
             if reqest == 'disconnect':
                 self.sender(reqest)
                 print(self.client.recv(1024).decode('utf-8'))
             else:
-                pass # ответ от сервера на полученный зпрос  |||||||||| походу надо использовать Json :|
+                self.sender(reqest)
+                data = json.loads(self.client.recv(1024).decode('utf-8'))
+
+                if data['answer']:
+                    print(f'SERVER ANSWER:\n\t{data["answer"]}')
+                elif data['error']:
+                    print(f'SERVER ANSWER:\n\t{data["error"]}')
+
 
 
 
