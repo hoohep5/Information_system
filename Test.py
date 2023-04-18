@@ -1,5 +1,6 @@
 #4 сущности user, procedure, master, salone. Каждая сущность поддерживает все следующие операции CRUD Create, read, update, delete.
 # на каждый класс Dao
+import keyboard
 start = """
 ╭────────────────────────────╮
 │  ┌───────┐ ┌────────────┐  │
@@ -15,7 +16,7 @@ signin_1 = """
 │                          └────┘  │
 │  Login:
 """
-print(signin_1)
+
 signin_2 = """
 ╭──────────────────────────────────╮
 │                          ┌────┐  │
@@ -24,7 +25,7 @@ signin_2 = """
 │  Login: login678901234567890     │
 │  Pass:
 """
-print(signin_2)
+
 regist_1 = """
 ╭──────────────────────────────────╮
 │                          ┌────┐  │
@@ -32,7 +33,7 @@ regist_1 = """
 │                          └────┘  │
 │  Login:
 """
-print(regist_1)
+
 regist_2 = """
 ╭──────────────────────────────────╮
 │                          ┌────┐  │
@@ -41,4 +42,10 @@ regist_2 = """
 │  Login: login678901234567890     │
 │  Pass:
 """
-print(regist_2)
+while True:
+    try:
+        if keyboard.is_pressed('enter'):  # if key 'q' is pressed
+            print(signin_1)
+            break
+    except:
+        break
