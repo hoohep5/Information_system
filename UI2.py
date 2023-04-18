@@ -1,5 +1,4 @@
 import curses
-import socket
 
 HOST = "127.0.0.1"
 PORT = 65432
@@ -39,7 +38,7 @@ class ConsoleUI:
                 stdscr.addstr(i + 1, 1, option)
             stdscr.refresh()
 
-            # Обработка того, что вел пользователь
+            # Обработка того, что ввел пользователь
             key = stdscr.getch()
             if key == ord("w"):
                 self.selected_option = (self.selected_option - 1) % len(self.options)
