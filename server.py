@@ -2,6 +2,7 @@ import base64
 import socket
 import json
 from cryptography.fernet import Fernet
+from threading import Thread
 
 
 class User:
@@ -100,7 +101,7 @@ class Server:
         user_ip = addr[0]
         user_port = addr[1]
 
-        if not (user_ip in self.blocked):  # Если пользователь не заблокирован
+        if not (user_ip in self.blocked):  # if user is not blocked
 
             this_user = self.get_user(addr[0])
 
@@ -132,51 +133,38 @@ class Server:
             self.sender(user, user.key, 'Access denied!')
             user.close()
 
-
     def start_server(self):
 
         while True:
+            # create individual for every user flow to authorization
 
             user, addr = self.ser.accept()
-            print(f'CONNECTED\n\tIP: {addr[0]}\nPORT: {addr[1]}\n')
-            self.listen(user)
+            Thread(target=self.authorization, args=(user, addr,)).start()
 
     def listen(self, user, addr):
-        self.sender(user, user.key, "YOU ARE CONNECTED!")
         is_work = True
         while is_work:
-            try:
-                data = user.recv(1024)
-                self.sender(user, user.key, "GETTED")
 
+            try:
+                data = self.get_msg(user, self.get_user(addr[0]).key)
             except Exception as e:
+                print('CLIENT DISCONNECTED!')
                 data = ''
                 is_work = False
 
             if len(data) > 0:
-                msg = data.decode('utf-8')
-                if msg == 'DISCONNECT':
-                    self.sender(user, "YOU ARE DISCONNECTED")
+                msg = data
+
+                if msg in ('disconnect', 'exit'):
+                    print('CLIENT DISCONNECTED!')
                     user.close()
                     is_work = False
 
                 else:
-                    file_database = open("database.txt", "r+")
-                    database_content = file_database.read()
+                    # user message processing
 
-                    try:
-                        answer = [x for x in data]
-                        error = ''
-                    except Exception as e:
-                        error = str(e)
-                        answer = ''
-                    file_database.close()
-                    self.sender(user, database_content)
+                    this_user = self.get_user(addr[0])
+                    if this_user:
 
-                    ans = json.dumps({'answer': answer, 'error': error})
-
-                    self.sender(user, ans)
-
-            else:
-                print('CLIENT DISCONNECTED')
-                is_work = False
+                        if msg == 'get access level':
+                            self.sender(user, this_user.key, this_user.level)
