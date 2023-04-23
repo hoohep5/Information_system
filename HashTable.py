@@ -24,10 +24,13 @@ class HashTable:
     def insert(self, key, value):
 
         index = self.hash_key_function(key)
+
         for pair in self.table[index]:
+
             if pair[0] == key:
                 pair[1] = value
                 return
+
         self.table[index].append([key, value])
 
         self.save_in_file('HashUsers.txt')
@@ -37,21 +40,29 @@ class HashTable:
 
         for i in range(self.size):
             print(f"Bucket {i}:")
+
             for pair in self.table[i]:
                 print(f"  {pair[0]}: {pair[1]}")
 
     # searching element by key
     def search(self, key):
+
         index = self.hash_key_function(key)
+
         for pair in self.table[index]:
+
             if pair[0] == key:
                 return pair[1]
+
         return None
 
     # load data from txt and hashing psswords
     def load_txt(self, filename, delimiter=';'):
+
         with open(filename, 'r') as f:
+
             for line in f:
+
                 if line.strip():
                     key, password = line.strip().split(delimiter)
                     hashed_password = self.hash_pass_function(password)
@@ -61,7 +72,9 @@ class HashTable:
     def load_from_file(self, filename):
 
         with open(filename, 'r') as f:
+
             for line in f:
+
                 if line.strip():
                     key, hashed_password = line.strip().split(';')
                     self.insert(key, hashed_password)
@@ -69,7 +82,9 @@ class HashTable:
     def save_in_file(self, filename):
 
         with open(filename, 'w') as f:
+
             for index in range(self.size):
+
                 for pair in self.table[index]:
                     f.write(pair[0] + ';' + pair[1] + '\n')
 
@@ -100,6 +115,7 @@ hash_table.add_user('new_user', 'new_password')
 
 # checking password
 is_correct = hash_table.verify_user('vitalya', '1234')
+
 if is_correct:
     print('Пароль верный')
 else:
