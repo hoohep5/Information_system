@@ -17,11 +17,11 @@ class HashTable:
     @staticmethod
     def hash_pass_function(password):
 
-        # using hash-function sha-256 to grnerate password hash
+        # using hash-function sha-256 to generate password hash
         return hashlib.sha256(password.encode()).hexdigest()
 
     # inserts a key and value into a hash table. If the key already exists, then updates the value.
-    def insert(self, key, value):
+    def insert(self, key, value, ip_address, access_level):
 
         index = self.hash_key_function(key)
 
@@ -29,9 +29,11 @@ class HashTable:
 
             if pair[0] == key:
                 pair[1] = value
+                pair[2] = ip_address
+                pair[3] = access_level
                 return
 
-        self.table[index].append([key, value])
+        self.table[index].append([key, value, ip_address, access_level])
 
         self.save_in_file('HashUsers.txt')
 
@@ -42,7 +44,7 @@ class HashTable:
             print(f"Bucket {i}:")
 
             for pair in self.table[i]:
-                print(f"  {pair[0]}: {pair[1]}")
+                print(f"  {pair[0]}: {pair[1]}, IP: {pair[2]}, ACCESS: {pair[3]} ")
 
     # searching element by key
     def search(self, key):
@@ -56,7 +58,7 @@ class HashTable:
 
         return None
 
-    # load data from txt and hashing psswords
+    # load data from txt and hashing passwords
     def load_txt(self, filename, delimiter=';'):
 
         with open(filename, 'r') as f:
@@ -64,10 +66,9 @@ class HashTable:
             for line in f:
 
                 if line.strip():
-                    key, password = line.strip().split(delimiter)
+                    key, password, ip_address, access_level = line.strip().split(delimiter)
                     hashed_password = self.hash_pass_function(password)
-                    self.insert(key, hashed_password)
-
+                    self.insert(key, hashed_password, ip_address, access_level)
 
     def load_from_file(self, filename):
 
@@ -76,23 +77,20 @@ class HashTable:
             for line in f:
 
                 if line.strip():
-                    key, hashed_password = line.strip().split(';')
-                    self.insert(key, hashed_password)
+                    key, hashed_password, ip_address, access_level = line.strip().split(';')
+                    self.insert(key, hashed_password, ip_address, access_level)
 
     def save_in_file(self, filename):
 
         with open(filename, 'w') as f:
-
             for index in range(self.size):
-
                 for pair in self.table[index]:
-                    f.write(pair[0] + ';' + pair[1] + '\n')
+                    f.write(pair[0] + ';' + pair[1] + ';' + pair[2] + '\n')
 
-
-    def add_user(self, key, password):
+    def add_user(self, key, password, ip_address, access_level):
 
         hashed_password = self.hash_pass_function(password)
-        self.insert(key, hashed_password)
+        self.insert(key, hashed_password, ip_address, access_level)
 
     def verify_user(self, key, password):
 
@@ -105,22 +103,20 @@ class HashTable:
             return False
 
 
-hash_table = HashTable(10)
-
-# load users from txt (delimiter is ';')
-hash_table.load_txt('Users.txt', ';')
-
-# add new user
-hash_table.add_user('new_user', 'new_password')
-
-# checking password
-is_correct = hash_table.verify_user('vitalya', '1234')
-
-if is_correct:
-    print('Пароль верный')
-else:
-    print('Пароль неверный')
-
-
-
-hash_table.display_table()
+# hash_table = HashTable(10)
+#
+# # load users from txt (delimiter is ';')
+# hash_table.load_txt('Users.txt', ';')
+#
+# # add new user
+# hash_table.add_user('new_user', 'new_password', '192.168.0.1', 'low')
+#
+# # checking password
+# is_correct = hash_table.verify_user('vitalya', '1234')
+#
+# if is_correct:
+#     print('Пароль верный')
+# else:
+#     print('Пароль неверный')
+#
+# hash_table.display_table()

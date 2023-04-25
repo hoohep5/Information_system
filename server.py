@@ -3,28 +3,28 @@ import socket
 import json
 from cryptography.fernet import Fernet
 from threading import Thread
+import HashTable
 
+ht = HashTable.HashTable(20)
+ht = ht.load_from_file('HashUsers.txt')
 
 class User:
-    def __init__(self, ip, level, password):
-        self.ip = ip
-        self.level = level
-        self.password = password
 
-        key = ''
-        symbols = {
-            '0': 'Q', '1': 'W', '2': 'E', '3': 'R', '4': 'T', '5': 'Y', '6': 'U', '7': 'I', '8': 'O', '9': 'P',
-        }
-        p = ip.replace('.', '')
-        i = 0
-        key = ''
-        while len(key) != 32:
-            key = f'{key}{symbols[p[i]]}'
-            i += 1
-            if i == len(p):
-                i = 0
-        key = key.encode()
-        self.key = base64.urlsafe_b64encode(key)
+    def __init__(self, name, password, ip, access_level):
+        self.name = name
+        self.password = password
+        self.ip = ip
+        self.access_level = access_level
+
+    # открываем файл и читаем его построчно
+
+
+with open('HashUsers.txt', 'r') as file:
+    for line in file:
+        # разделяем строку на поля
+        fields = line.strip().split(';')
+
+
 
 
 class Server:
@@ -38,20 +38,6 @@ class Server:
 
         self.blocked = []
         self.users = []
-
-    # save information about user to file data.json
-    def save(self):
-
-        data = {}
-
-        for user in self.users:
-            data.update({user.ip: [user.level, user.password]})
-
-        data = json.dumps(data)
-        data = json.loads(str(data))
-
-        with open('data.json', 'w', encoding='utf-8') as file:
-            json.dump(data, file, ident=4)
 
     # load information about user from data.json to self.users[]
     def load(self):
@@ -75,7 +61,8 @@ class Server:
         return None
 
     # encrypt and send message from server to user
-    def sender(self, user, key, text):
+    @staticmethod
+    def sender(user, key, text):
 
         f = Fernet(key)
 
@@ -87,7 +74,8 @@ class Server:
             print('CLIENT DISCONNECTED!')
 
     # get encrypted message from user and decrypt it
-    def get_msg(self, user, key):
+    @staticmethod
+    def get_msg(user, key):
 
         data = user.recv(1024)
         f = Fernet(key)
@@ -96,42 +84,43 @@ class Server:
         return data.decode()
 
     # authorization user by password
-    def authorization(self, user, addr):
+    def authorization(user, addr):
+
+        # Load users from file into a hash table
+        ht = HashTable.HashTable(20)
+        ht.load_from_file('users.txt')
 
         user_ip = addr[0]
-        user_port = addr[1]
 
-        if not (user_ip in self.blocked):  # if user is not blocked
 
-            this_user = self.get_user(addr[0])
+        if user_ip in ht:
+            user_data = ht.get(user_ip)
+            user_level = user_data[0]
+            user_password = user_data[1]
 
-            if this_user == None:
-                self.users.append(User(addr[0], 'low level user', '1234pass')) # standart pass for user
-                self.save()
-                this_user = self.get_user(addr[0])
-
-            if this_user.password != '':
-                self.sender(user, this_user.key, 'Type you password.')
+            if user_password != '':
+                Server.sender(user, user_data[2], 'Type your password.')
                 try:
-                    user_password = self.get_msg(user, this_user.key)
+                    user_password_input = Server.get_msg(user, user_data[2])
                 except Exception as e:
-                    user_password = None
+                    user_password_input = None
 
-                if user_password == this_user.password:
-                    self.sender(user, this_user.key, 'Access is allowed!')
-                    self.listen(user, addr)
+                if user_password_input == user_password:
+                    Server.sender(user, user_data[2], 'Access is allowed!')
+                    Server.listen(user, addr)
 
                 else:
-                    self.sender(user, this_user.key, 'Access denied!')
+                    Server.sender(user, user_data[2], 'Access denied!')
                     user.close()
 
             else:
-                self.sender(user, this_user.key, 'Access is allowed!')
-                self.listen(user, addr)
+                Server.sender(user, user_data[2], 'Access is allowed!')
+                Server.listen(user, addr)
 
         else:
-            self.sender(user, user.key, 'Access denied!')
+            Server.sender(user, user.key, 'Access denied!')
             user.close()
+
 
     def start_server(self):
 
@@ -168,3 +157,11 @@ class Server:
 
                         if msg == 'get access level':
                             self.sender(user, this_user.key, this_user.level)
+
+                        if msg == 'print hash table users':
+
+                            with open('HashUsers.txt', 'r') as f:
+
+                                read_file = f.read()
+                                print(read_file)
+

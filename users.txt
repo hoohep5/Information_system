@@ -1,2 +1,2 @@
-popka;durak
-vitalya;1234
+popka;durak;2345.543.234.5;low
+vitalya;1234;6543.2345.543.2;high
