@@ -45,5 +45,6 @@ class Client:
                     print(f'SERVER ANSWER:\n\t{data["error"]}')
 
 
-
+client = Client('192.168.1.35', 5555)
+client.connect()
 

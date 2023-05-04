@@ -9,7 +9,6 @@ ht = ht.load_from_file('HashUsers.txt')
 
 IP = 'localhost'  # адрес хоста
 PORT = 8080  # порт для приема запросов
-ADDR = (IP, PORT)  # объединяем адрес и порт в кортеж
 
 
 class User:
@@ -19,8 +18,6 @@ class User:
         self.password = password
         self.ip = ip
         self.access_level = access_level
-        port = 8080
-        addr = (ip, port)  # объединяем адрес и порт в кортеж
 
         secret_key = ''
         symbols = {
@@ -28,24 +25,14 @@ class User:
         }
         p = ip.replace('.', '')
         i = 0
-        key = ''
+        secret_key = ''
         while len(secret_key) != 32:
-            key = f'{secret_key}{symbols[p[i]]}'
+            secret_key = f'{secret_key}{symbols[p[i]]}'
             i += 1
             if i == len(p):
                 i = 0
         secret_key = secret_key.encode()
-        self.secret_key = base64.urlsafe_b64encode(key)
-
-    # открываем файл и читаем его построчно
-
-
-with open('HashUsers.txt', 'r') as file:
-    for line in file:
-        # разделяем строку на поля
-        fields = line.strip().split(';')
-
-
+        self.secret_key = base64.urlsafe_b64encode(secret_key)
 
 
 class Server:
@@ -85,15 +72,15 @@ class Server:
 
         # service command
     @staticmethod
-    def get_user(key):
+    def get_user(login):
 
-        index = HashTable.hash_table.hash_key_function(key)
+        index = HashTable.hash_table.hash_key_function(login)
 
         try:
 
             for pair in HashTable.hash_table.table[index]:
 
-                if pair[0] == key:
+                if pair[0] == login:
                     return HashTable.hash_table.table[index]
 
                 else:
@@ -102,23 +89,18 @@ class Server:
         except Exception as e:
             print('GET_USER ERROR!')
 
-    def start_server(self):
-
-        while True:
-            # create individual for every user flow to authorization
-
-            user, addr = self.ser.accept()
-            Thread(target=self.authorization, args=(user, addr)).start()
-
     # authorization user by password
     @staticmethod
-    def authorization(user, self, key):
+    def authorization(self, user, addr):
+
+        user_ip = addr[0]
+        user_port = addr[1]
 
         # Load users from file into a hash table
         ht = HashTable.HashTable(20)
         ht.load_from_file('users.txt')
 
-        this_user = list(self.get_user(key))
+        this_user = list(self.get_user(user.name))
 
         password = this_user[1]
         ip = this_user[2]
@@ -134,7 +116,7 @@ class Server:
             user_password = password.encode()
             if user_password_input == user_password:
                 Server.sender(user, key, 'Access is allowed!')
-                Server.listen(user, ADDR)
+                Server.listen(user, addr)
 
             else:
                 Server.sender(user, key, 'Access denied!')
@@ -142,14 +124,23 @@ class Server:
 
         else:
             Server.sender(user, key, 'Access is allowed!')
-            Server.listen(user, ADDR)
+            Server.listen(user, addr)
+
+    def start_server(self):
+
+        while True:
+            # create individual for every user flow to authorization
+
+            user, addr = self.ser.accept()
+            Thread(target=self.authorization, args=(user, addr)).start()
+
+
 
     def listen(self, user, addr):
         is_work = True
         while is_work:
 
             try:
-
 
                 data = self.get_msg(user, self.get_user(addr[0]).secret_key)
             except Exception as e:
