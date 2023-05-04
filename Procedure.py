@@ -15,8 +15,8 @@ class Procedure():
         f = open("Procedure.txt", "a+")
         lines = f.readlines()
         for l in lines:
-            if l != str(self.id)+"-"+str(self.data)+"-"+str(self.name)+"-"+str(self.description)+"-"+str(self.price)+"\n":
-                f.write(str(self.id)+"-"+str(self.data)+"-"+str(self.name)+"-"+str(self.description)+"-"+str(self.price)+"\n")
+            if l != str(self.id)+";"+str(self.data)+";"+str(self.name)+";"+str(self.description)+";"+str(self.price)+"\n":
+                f.write(str(self.id)+";"+str(self.data)+";"+str(self.name)+";"+str(self.description)+";"+str(self.price)+"\n")
             else:
                 pass
         f.close()

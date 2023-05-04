@@ -1,5 +1,5 @@
-01-60-massage-prosto massage spini-1000
-02-60-massage plech-prosto massage plech-700
-03-45-massage nog-prosto massage nog-1200
-04-20-hair cut-prosto hair cut-300
-05-30-make up-proso make up-500
+01;60;massage;prosto massage spini;1000
+02;60;massage plech;prosto massage plech;700
+03;45;massage nog;prosto massage nog;1200
+04;20;hair cut;prosto hair cut;300
+05;30;make up;proso make up;500
