@@ -7,7 +7,24 @@ class Salon():
     location = 0
     name = "no name"
     def CreateSalon(self):
+        f = open("Salon.txt", "a+")
+        lines = f.readlines()
+        for l in lines:
+            if l != str(self.id) + ";" + str(self.location) + ";" + str(self.name)+"\n":
+                f.write(str(self.id) + ";" + str(self.location) + ";" + str(self.name)+"\n")
+            else:
+                pass
+        f.close()
+    def getAllSalons(self):
+        f = open("Salon.txt", "r")
+        lines = f.readlines()
+        for l in lines:
+            print(l.strip())
+        f.close()
+    def getAllSorted(self):
         pass
-    def DeleteSalon(self):
+    def getSalonById(self, list, id):
         pass
-    pass
+    def deleteSalon(self):
+        pass
+
