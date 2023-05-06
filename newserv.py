@@ -10,7 +10,7 @@ class Server:
     def __init__(self, ip, port, hashtable):
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server.bind((ip, port))
-        self.server.listen(5)
+        self.server.listen(1)
         self.hash_table = hashtable
 
     def listen(self):
@@ -58,6 +58,6 @@ class Server:
 if __name__ == '__main__':
     hash_table = HashTable.HashTable(10)
     hash_table.load_from_file('HashUsers.txt')
-    server = Server('192.168.1.35', 8000, hash_table)
+    server = Server('192.168.56.1', 5000, hash_table)
     server.listen()
 

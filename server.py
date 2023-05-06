@@ -107,7 +107,7 @@ class Server:
         level = this_user[3]
 
         if password != '':
-            Server.sender(user, key, 'Type your password.')
+            Server.sender(user, secret_key, 'Type your password.')
             try:
                 user_password_input = Server.get_msg(user, key)
             except Exception as e:
