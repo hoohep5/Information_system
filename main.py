@@ -1,13 +1,16 @@
 import Procedure as p
-fProc = open("Procedure.txt", "r")
-procedures = fProc.readlines()
-for line in range(len(procedures)):
-    procedures[line] = procedures[line].replace("\n", "")
-    procedures[line] = procedures[line].split(";")
-for line in range(len(procedures)):
-    print(procedures[line])
-proceduresEcz = []
-for line in range(len(procedures)):
-    proceduresEcz.append(p.Procedure(procedures[line][0],procedures[line][1],procedures[line][2],procedures[line][3],procedures[line][4]))
-for line in range(len(proceduresEcz)):
-    print(proceduresEcz[line].name + " " + proceduresEcz[line].price)
+import Salon as s
+import Master as m
+
+a = p.Procedure()
+salon = s.Salon()
+master = m.Master()
+#print(a.getAllProcedures())
+#print(a.getProcedureById("01"))
+#a.deleteProcedure("06")
+b = p.Procedure("01", 64, "asdsadasd", "asdasdasdasdasdadasd", 0)
+c = p.Procedure("03", 6, "dsadasd", "asdasdasdasdadasd", 5)
+b.createNewProcedure()
+c.createNewProcedure()
+print(salon.getAllSalons())
+print(master.getAllMasters())
