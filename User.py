@@ -67,3 +67,7 @@ class User():
                 else:
                     f.write(l[i] + ";")
             f.write("\n")
+
+    def registerProcedure(self):
+        pass
+
