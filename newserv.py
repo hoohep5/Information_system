@@ -36,7 +36,6 @@ class Server:
                 if data['request_type'] == 'authorization':
                     key = data['key']
                     password = data['password']
-                    ip_address = client_address[0]
                     access_level = self.hash_table.verify_user(key, password)
                     response = {'answer': access_level}
                     client_socket.send(json.dumps(response).encode('utf-8'))
