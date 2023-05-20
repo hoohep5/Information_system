@@ -11,19 +11,9 @@ response = client.recv(1024).decode('utf-8')
 print(response)
 
 while True:
-    message = input('Введите сообщение: ')
 
-    if message == 'disconnect':
-        client.send(message.encode('utf-8'))
-        response = client.recv(1024).decode('utf-8')
-        print(response)
-        break
+    request_type = input('Введите Запрос: ')
 
-    request_type = input('Введите тип запроса (authorization/database): ')
-
-    if request_type not in ['authorization', 'database']:
-        print('Неверный тип запроса!')
-        continue
 
     if request_type == 'authorization':
         key = input('Введите ключ: ')
@@ -33,12 +23,23 @@ while True:
             'key': key,
             'password': password
         }
+
+    elif request_type == 'disconnect':
+        client.send(request_type.encode('utf-8'))
+        response = client.recv(1024).decode('utf-8')
+        print(response)
+        break
+
     else:
         request = input('Введите запрос: ')
         data = {
             'request_type': request_type,
             'request': request
         }
+
+    if request_type not in ['authorization', 'database', 'disconnect']:
+        print('Неверный тип запроса!')
+        continue
 
     message = json.dumps(data)
     client.send(message.encode('utf-8'))
