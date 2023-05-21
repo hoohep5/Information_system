@@ -123,24 +123,15 @@ class HashTable:
             return False
 
 
-# hash_table = HashTable(10)
-#
+hash_table = HashTable(10)
+
 # load users from txt (delimiter is ';')
-# hash_table.load_txt('Users.txt', ';')
-#
-# # add new user
-# hashtable.add_user('new_user', 'new_password', '192.168.0.1', 'low')
-#
-# # checking password
-# is_correct = hashtable.verify_user('vitalya', '1234')
-#
-# if is_correct:
-#     print('Пароль верный')
-# else:
-#     print('Пароль неверный')
-#
-# hash_table.display_table()
-#
-# hash_table.get_user('vitalya', '6543.2345.543.2')
+hash_table.load_txt('Users.txt', ';')
+
+# add new user
+hash_table.add_user('new_user', 'new_password', '192.168.0.1', 'low')
+
+hash_table.display_table()
+hash_table.get_user('vitalya', '6543.2345.543.2')
 
 
