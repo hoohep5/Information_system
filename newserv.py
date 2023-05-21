@@ -3,15 +3,17 @@ import socket
 from threading import Thread
 
 import HashTable
+import regist
 
 
 class Server:
 
-    def __init__(self, ip, port, hashtable):
+    def __init__(self, ip, port, hashtable, regist):
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server.bind((ip, port))
         self.server.listen(1)
         self.hash_table = hashtable
+        self.regist = regist
 
     def listen(self):
         while True:
@@ -46,6 +48,15 @@ class Server:
                     response = {'answer': result}
                     client_socket.send(json.dumps(response).encode('utf-8'))
 
+                elif data['request_type'] == 'regist':
+                    key = data['key']
+                    procedure = data['procedure']
+                    master = data['master']
+                    user = data['user']
+                    result = self.regist.add_regist(key, user, procedure, master)
+                    response = {'answer': result}
+                    client_socket.send(json.dumps(response).encode('utf-8'))
+
                 else:
                     client_socket.send('UNKNOWN REQUEST!'.encode('utf-8'))
 
@@ -56,7 +67,9 @@ class Server:
 
 if __name__ == '__main__':
     hash_table = HashTable.HashTable(10)
+    regist_base = regist.Regist(10)
     hash_table.load_from_file('HashUsers.txt')
-    server = Server('192.168.56.1', 5000, hash_table)
+    regist_base.load_from_file('regist.txt')
+    server = Server('192.168.56.1', 5000, hash_table, regist_base)
     server.listen()
 

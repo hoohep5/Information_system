@@ -24,6 +24,19 @@ while True:
             'password': password
         }
 
+    elif request_type == 'regist':
+        key = input('Введите время: ')
+        procedure = input('Введите процедуру: ')
+        master = input('Введите мастера: ')
+        user = input('Введите имя: ')
+        data = {
+            'request_type': request_type,
+            'key': key,
+            'procedure': procedure,
+            'master': master,
+            'user': user
+        }
+
     elif request_type == 'disconnect':
         client.send(request_type.encode('utf-8'))
         response = client.recv(1024).decode('utf-8')
@@ -37,7 +50,7 @@ while True:
             'request': request
         }
 
-    if request_type not in ['authorization', 'database', 'disconnect']:
+    if request_type not in ['authorization', 'database', 'disconnect', 'regist']:
         print('Неверный тип запроса!')
         continue
 

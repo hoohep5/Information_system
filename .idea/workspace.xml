@@ -5,10 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="365d7c30-55b3-46f4-860c-de2f8e41c65a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/HashTableProcedure.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/regist.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/regist.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HashTable.py" beforeDir="false" afterPath="$PROJECT_DIR$/HashTable.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HashUsers.txt" beforeDir="false" afterPath="$PROJECT_DIR$/HashUsers.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cli.py" beforeDir="false" afterPath="$PROJECT_DIR$/cli.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/newserv.py" beforeDir="false" afterPath="$PROJECT_DIR$/newserv.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
