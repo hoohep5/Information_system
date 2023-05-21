@@ -65,11 +65,9 @@ class Regist:
                     self.insert(key, user, procedure, exp)
 
     def add_regist(self, key, user, procedure, master):
-        if(self.search(key)):
-            text = "Время занято"
-            return text
+        if(self.search(key) == True):
+            return True
         else:
             self.insert(key, user, procedure, master)
-            text = "Зарегестриравано"
-            return text
+            return False
 

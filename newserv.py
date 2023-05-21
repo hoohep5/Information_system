@@ -54,8 +54,12 @@ class Server:
                     master = data['master']
                     user = data['user']
                     result = self.regist.add_regist(key, user, procedure, master)
-                    response = {'answer': result}
-                    client_socket.send(json.dumps(response).encode('utf-8'))
+                    if (result == True):
+                        response = {f'Time is full': result}
+                        client_socket.send(json.dumps(response).encode('utf-8'))
+                    elif (result == False):
+                        response = {f'Register': result}
+                        client_socket.send(json.dumps(response).encode('utf-8'))
 
                 else:
                     client_socket.send('UNKNOWN REQUEST!'.encode('utf-8'))
@@ -71,5 +75,6 @@ if __name__ == '__main__':
     hash_table.load_from_file('HashUsers.txt')
     regist_base.load_from_file('regist.txt')
     server = Server('192.168.56.1', 5000, hash_table, regist_base)
+#    server = Server('127.0.0.1', 2000, hash_table, regist_base) for win
     server.listen()
 
