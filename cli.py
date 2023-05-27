@@ -1,8 +1,8 @@
 import socket
 import json
 
-server_ip = '192.168.56.1'
-server_port = 5000
+server_ip = ' 127.0.0.1'
+server_port = 2000
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect((server_ip, server_port))

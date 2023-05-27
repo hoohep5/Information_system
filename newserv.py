@@ -38,6 +38,7 @@ class Server:
                 if data['request_type'] == 'authorization':
                     key = data['key']
                     password = data['password']
+                    ip_address = client_address[0]
                     access_level = self.hash_table.verify_user(key, password)
                     response = {'answer': access_level}
                     client_socket.send(json.dumps(response).encode('utf-8'))
@@ -74,7 +75,7 @@ if __name__ == '__main__':
     regist_base = regist.Regist(10)
     hash_table.load_from_file('HashUsers.txt')
     regist_base.load_from_file('regist.txt')
-    server = Server('192.168.56.1', 5000, hash_table, regist_base)
-#    server = Server('127.0.0.1', 2000, hash_table, regist_base) for win
+    server = Server('127.0.0.1', 2000, hash_table, regist_base)
+    # server = Server('127.0.0.1', 2000, hash_table, regist_base) for win
     server.listen()
 
