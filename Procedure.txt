@@ -1,4 +1,0 @@
-12;123;sfsdf;123;123
-01;64;asdsadasd;asdasdasdasdasdadasd;0
-02;64;asdsadasd;asdasdasdasdasdadasd;0
-03;6;dsadasd;asdasdasdasdadasd;5
