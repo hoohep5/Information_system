@@ -46,11 +46,13 @@ class Window:
     #     self.object1 = object1
     #     self.object2 = object2
     #     self.object3 = object3
+
+    # Основное окно
     @staticmethod
     def printBasicWindow(length, width, back, title, list):
         print("╭", "─"*(length - 2), "╮", sep = "")
-        isTitled = False
-        if back:
+        isTitled = False # Наличие загаловка
+        if back: # Проверка на наличие кнопки back
             if (length % 2 == 0 and len(title) % 2 == 0) or (length % 2 != 0 and len(title) % 2 != 0):
                 print("│", " " * ((length - len(title) - 1) // 2), title, " " * ((length - len(title) - 1) // 2 - 6), "┌────┐", "│", sep = "")
             else:
@@ -75,6 +77,7 @@ class Window:
             #     print("│", " " * (length - 2), "│", sep = "")
         print("╰", "─" * (length - 2), "╯", sep = "")
 
+    # Окно регистрации
     def printSignIn(length, width):
         print("╭", "─" * (length - 2), "╮", sep = "")
         for i in range((width // 2) - 1, 1, -1):
@@ -91,7 +94,74 @@ class Window:
         login = input()
         password = input()
 
+    # Приветственное окно
+    def printWelcome(length, width):
+        print("╭", "─" * (length - 2), "╮", sep = "")
+        for i in range((width // 2), 1, -1):
+            print("│", " " * (length - 2), "│", sep = "")
+        if length % 2 == 0:
+            print("│", " " * ((length - 18) // 2), "Добро пожаловать!", " " * ((length - 18) // 2 - 1), "│", sep = "")
+        else:
+            print("│", " " * ((length - 18) // 2), "Добро пожаловать!", " " * ((length - 18) // 2), "│", sep = "")
+        for i in range((width // 2), 1, -1):
+            print("│", " " * (length - 2), "│", sep = "")
+        print("╰", "─" * (length - 2), "╯", sep = "")
 
-Window.printBasicWindow(35, 3, False, "Добро пожаловать!", salons)
-Window.printBasicWindow(35, 3, False, "Вы зарегистрировались", salons)
-Window.printBasicWindow(40, 10, False, "Выберите процедуру", procedures)
+    # Окно успешной регистрации
+    def printRegistrated(length, width):
+        print("╭", "─" * (length - 2), "╮", sep = "")
+        for i in range((width // 2), 1, -1):
+            print("│", " " * (length - 2), "│", sep = "")
+        if length % 2 == 0:
+            print("│", " " * ((length - 22) // 2), "Вы зарегистрировались", " " * ((length - 22) // 2 - 1), "│", sep = "")
+        else:
+            print("│", " " * ((length - 22) // 2), "Вы зарегистрировались", " " * ((length - 22) // 2), "│", sep = "")
+        for i in range((width // 2), 1, -1):
+            print("│", " " * (length - 2), "│", sep = "")
+        print("╰", "─" * (length - 2), "╯", sep = "")
+
+    # Ошибка: неверный пароль
+    def printPasswordIncorrect(length, width):
+        print("╭", "─" * (length - 2), "╮", sep = "")
+        for i in range((width // 2), 1, -1):
+            print("│", " " * (length - 2), "│", sep = "")
+        if length % 2 == 0:
+            print("│", " " * ((length - 17) // 2), "Пароль неверный!", " " * ((length - 17) // 2), "│", sep = "")
+        else:
+            print("│", " " * ((length - 17) // 2), "Пароль неверный!", " " * ((length - 17) // 2 - 1), "│", sep = "")
+        for i in range((width // 2), 1, -1):
+            print("│", " " * (length - 2), "│", sep = "")
+        print("╰", "─" * (length - 2), "╯", sep = "")
+
+    # Ошибка: слишком длинный логин
+    def printLoginTooLong(length, width):
+        print("╭", "─" * (length - 2), "╮", sep="")
+        for i in range((width // 2), 1, -1):
+            print("│", " " * (length - 2), "│", sep="")
+        if length % 2 == 0:
+            print("│", " " * ((length - 23) // 2), "Логин слишком длинный!", " " * ((length - 23) // 2), "│", sep="")
+        else:
+            print("│", " " * ((length - 23) // 2), "Логин слишком длинный!", " " * ((length - 23) // 2 - 1), "│", sep="")
+        for i in range((width // 2), 1, -1):
+            print("│", " " * (length - 2), "│", sep="")
+        print("╰", "─" * (length - 2), "╯", sep="")
+
+    # Ошибка: слишком длинный пароль
+    def printPasswordTooLong(length, width):
+        print("╭", "─" * (length - 2), "╮", sep="")
+        for i in range((width // 2), 1, -1):
+            print("│", " " * (length - 2), "│", sep="")
+        if length % 2 == 0:
+            print("│", " " * ((length - 24) // 2), "Пароль слишком длинный!", " " * ((length - 24) // 2 - 1), "│", sep="")
+        else:
+            print("│", " " * ((length - 24) // 2), "Пароль слишком длинный!", " " * ((length - 24) // 2), "│", sep="")
+        for i in range((width // 2), 1, -1):
+            print("│", " " * (length - 2), "│", sep="")
+        print("╰", "─" * (length - 2), "╯", sep="")
+
+
+Window.printWelcome(21, 3)
+Window.printRegistrated(30, 3)
+Window.printPasswordIncorrect(20, 3)
+Window.printLoginTooLong(30, 3)
+Window.printPasswordTooLong(30, 3)
