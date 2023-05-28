@@ -1,113 +1,167 @@
-import curses
+# import os
+# import time
+# import keyboard
+#
+# welcome = """╭────────────────────────────╮
+#  │                            │
+#  │          Welcome!          │
+#  │                            │
+#  ╰────────────────────────────╯"""
+# sign_in_up = """╭──────────────────────────────╮
+#  │  ┌──────────┐  ┌──────────┐  │
+#  │  │Sign in(1)│  │Sign up(2)│  │
+#  │  └──────────┘  └──────────┘  │
+#  ╰──────────────────────────────╯"""
+# sign_in = """╭──────────────────────────────────╮
+#  │                          ┌────┐  │
+#  │  Sign in                 │Back│  │
+#  │                          └────┘  │
+#  │  Login:"""
+# sign_up = """╭──────────────────────────────────╮
+#  │                          ┌────┐  │
+#  │  Sign up                 │Back│  │
+#  │                          └────┘  │
+#  │  Login:"""
+#
+# os.system('cls')
+# print(welcome)
+# time.sleep(3)
+# os.system('cls')
+# print(sign_in_up)
+# while True:
+#     if keyboard.is_pressed('1'):
+#         os.system('cls')
+#         print(sign_in)
+#         time.sleep(2)
+#     elif keyboard.is_pressed('2'):
+#         os.system('cls')
+#         print(sign_up)
+#         time.sleep(2)
+procedures = ["massageyrtyrty", "z", "pilling", "massageyrtyrty", "z", "pilling"]
+salons = ["svenlanskaya", "aleutskaya", "komsomolcskaya"]
 
+class Window:
+    # def __init__(self, frames, object1, object2, object3):
+    #     self.frames = frames
+    #     self.object1 = object1
+    #     self.object2 = object2
+    #     self.object3 = object3
 
-class MenuDisplay:
-
-    def __init__(self, menu):
-        self.menu = menu
-        curses.wrapper(self.mainloop)
-
-    def mainloop(self, stdscr):
-        # Выключение мигание курсора
-        curses.curs_set(0)
-
-        # Цвета выделения
-        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
-
-        self.stdscr = stdscr
-
-        # Высота и ширина текста
-        self.screen_height, self.screen_width = self.stdscr.getmaxyx()
-
-        # Выбранная строка при запуске
-        current_row = 0
-
-        self.print_menu(current_row)
-
-        while 1:
-            key = self.stdscr.getch()
-
-            if key == curses.KEY_UP and current_row > 0:
-                current_row -= 1
-            elif key == curses.KEY_DOWN and current_row < len(self.menu) - 1:
-                current_row += 1
-            elif key == curses.KEY_ENTER or key in [10, 13]:
-                self.print_center("Вы выбрали '{}'".format(self.menu[current_row]))
-                self.stdscr.getch()
-                # При выборе последней строки переход на подтверждение выхода
-                if current_row == len(self.menu) - 1:
-                    if self.confirm("Вы уверены что хотите выйти?"):
-                        break
-
-            self.print_menu(current_row)
-
-    def print_menu(self, selected_row_idx):
-        self.stdscr.clear()
-        for idx, row in enumerate(self.menu):
-            x = self.screen_width // 2 - len(row) // 2
-            y = self.screen_height // 2 - len(menu) // 2 + idx
-            if idx == selected_row_idx:
-                self.color_print(y, x, row, 1)
+    # Основное окно
+    @staticmethod
+    def printBasicWindow(length, width, back, title, list):
+        print("╭", "─"*(length - 2), "╮", sep = "")
+        isTitled = False # Наличие загаловка
+        if back: # Проверка на наличие кнопки back
+            if (length % 2 == 0 and len(title) % 2 == 0) or (length % 2 != 0 and len(title) % 2 != 0):
+                print("│", " " * ((length - len(title) - 1) // 2), title, " " * ((length - len(title) - 1) // 2 - 6), "┌────┐", "│", sep = "")
             else:
-                self.stdscr.addstr(y, x, row)
-        self.stdscr.refresh()
-
-    def color_print(self, y, x, text, pair_num):
-        self.stdscr.attron(curses.color_pair(pair_num))
-        self.stdscr.addstr(y, x, text)
-        self.stdscr.attroff(curses.color_pair(pair_num))
-
-    def print_confirm(self, selected="Да"):
-        curses.setsyx(self.screen_height // 2 + 1, 0)
-        self.stdscr.clrtoeol()
-
-        y = self.screen_height // 2 + 1
-        options_width = 10
-
-        # Вывод да
-        option = "Да"
-        x = self.screen_width // 2 - options_width // 2 + len(option)
-        if selected == option:
-            self.color_print(y, x, option, 1)
+                print("│", " " * ((length - len(title) - 1) // 2), title, " " * ((length - len(title) - 1) // 2 - 7), "┌────┐", "│", sep = "")
+            print("│", " " * (length - 8), "│Back│", "│", sep = "")
+            print("│", " " * (length - 8), "└────┘", "│", sep = "")
+            width -= 3
+            isTitled = True
+        if isTitled:
+            # for i in range(width - 1, 1, -1):
+            #     print("│", " " * (length - 2), "│", sep = "")
+            for j in list:
+                print("│", j, " " * ((length - 5) - len(j)), "│")
         else:
-            self.stdscr.addstr(y, x, option)
+            if (length % 2 == 0 and len(title) % 2 == 0) or (length % 2 != 0 and len(title) % 2 != 0):
+                print("│", " " * ((length - len(title) - 1) // 2), title, " " * ((length - len(title) - 1) // 2), "│", sep = "")
+            else:
+                print("│", " " * ((length - len(title) - 1) // 2), title, " " * ((length - len(title) - 1) // 2 - 1), "│", sep = "")
+            for j in list:
+                print("│", j, " " * ((length - 5) - len(j)), "│")
+            # for i in range(width - 2, 1, -1):
+            #     print("│", " " * (length - 2), "│", sep = "")
+        print("╰", "─" * (length - 2), "╯", sep = "")
 
-        # Вывод нет
-        option = "Нет"
-        x = self.screen_width // 2 + options_width // 2 - len(option)
-        if selected == option:
-            self.color_print(y, x, option, 1)
+    # Окно регистрации
+    def printSignIn(length, width):
+        print("╭", "─" * (length - 2), "╮", sep = "")
+        for i in range((width // 2) - 1, 1, -1):
+            print("│", " " * (length - 2), "│", sep = "")
+        if length % 2 == 0:
+            print("│", " " * ((length - 14) // 2), "Введите логин", " " * ((length - 14) // 2 - 1), "│", sep = "")
+            print("│", " " * ((length - 9) // 2), "и пароль", " " * ((length - 9)//2), "│", sep = "")
         else:
-            self.stdscr.addstr(y, x, option)
+            print("│", " " * ((length - 14) // 2), "Введите логин", " " * ((length - 14) // 2), "│", sep = "")
+            print("│", " " * ((length - 9) // 2), "и пароль", " " * ((length - 9) // 2 - 1), "│", sep = "")
+        for i in range((width // 2) - 1, 1, -1):
+            print("│", " " * (length - 2), "│", sep = "")
+        print("╰", "─" * (length - 2), "╯", sep = "")
+        login = input()
+        password = input()
 
-        self.stdscr.refresh()
+    # Приветственное окно
+    def printWelcome(length, width):
+        print("╭", "─" * (length - 2), "╮", sep = "")
+        for i in range((width // 2), 1, -1):
+            print("│", " " * (length - 2), "│", sep = "")
+        if length % 2 == 0:
+            print("│", " " * ((length - 18) // 2), "Добро пожаловать!", " " * ((length - 18) // 2 - 1), "│", sep = "")
+        else:
+            print("│", " " * ((length - 18) // 2), "Добро пожаловать!", " " * ((length - 18) // 2), "│", sep = "")
+        for i in range((width // 2), 1, -1):
+            print("│", " " * (length - 2), "│", sep = "")
+        print("╰", "─" * (length - 2), "╯", sep = "")
 
-    def confirm(self, confirmation_text):
-        self.print_center(confirmation_text)
+    # Окно успешной регистрации
+    def printRegistrated(length, width):
+        print("╭", "─" * (length - 2), "╮", sep = "")
+        for i in range((width // 2), 1, -1):
+            print("│", " " * (length - 2), "│", sep = "")
+        if length % 2 == 0:
+            print("│", " " * ((length - 22) // 2), "Вы зарегистрировались", " " * ((length - 22) // 2 - 1), "│", sep = "")
+        else:
+            print("│", " " * ((length - 22) // 2), "Вы зарегистрировались", " " * ((length - 22) // 2), "│", sep = "")
+        for i in range((width // 2), 1, -1):
+            print("│", " " * (length - 2), "│", sep = "")
+        print("╰", "─" * (length - 2), "╯", sep = "")
 
-        current_option = "Нет"
-        self.print_confirm(current_option)
+    # Ошибка: неверный пароль
+    def printPasswordIncorrect(length, width):
+        print("╭", "─" * (length - 2), "╮", sep = "")
+        for i in range((width // 2), 1, -1):
+            print("│", " " * (length - 2), "│", sep = "")
+        if length % 2 == 0:
+            print("│", " " * ((length - 17) // 2), "Пароль неверный!", " " * ((length - 17) // 2), "│", sep = "")
+        else:
+            print("│", " " * ((length - 17) // 2), "Пароль неверный!", " " * ((length - 17) // 2 - 1), "│", sep = "")
+        for i in range((width // 2), 1, -1):
+            print("│", " " * (length - 2), "│", sep = "")
+        print("╰", "─" * (length - 2), "╯", sep = "")
 
-        while 1:
-            key = self.stdscr.getch()
+    # Ошибка: слишком длинный логин
+    def printLoginTooLong(length, width):
+        print("╭", "─" * (length - 2), "╮", sep="")
+        for i in range((width // 2), 1, -1):
+            print("│", " " * (length - 2), "│", sep="")
+        if length % 2 == 0:
+            print("│", " " * ((length - 23) // 2), "Логин слишком длинный!", " " * ((length - 23) // 2), "│", sep="")
+        else:
+            print("│", " " * ((length - 23) // 2), "Логин слишком длинный!", " " * ((length - 23) // 2 - 1), "│", sep="")
+        for i in range((width // 2), 1, -1):
+            print("│", " " * (length - 2), "│", sep="")
+        print("╰", "─" * (length - 2), "╯", sep="")
 
-            if key == curses.KEY_RIGHT and current_option == "Да":
-                current_option = "Нет"
-            elif key == curses.KEY_LEFT and current_option == "Нет":
-                current_option = "Да"
-            elif key == curses.KEY_ENTER or key in [10, 13]:
-                return True if current_option == "Да" else False
-
-            self.print_confirm(current_option)
-
-    def print_center(self, text):
-        self.stdscr.clear()
-        x = self.screen_width // 2 - len(text) // 2
-        y = self.screen_height // 2
-        self.stdscr.addstr(y, x, text)
-        self.stdscr.refresh()
+    # Ошибка: слишком длинный пароль
+    def printPasswordTooLong(length, width):
+        print("╭", "─" * (length - 2), "╮", sep="")
+        for i in range((width // 2), 1, -1):
+            print("│", " " * (length - 2), "│", sep="")
+        if length % 2 == 0:
+            print("│", " " * ((length - 24) // 2), "Пароль слишком длинный!", " " * ((length - 24) // 2 - 1), "│", sep="")
+        else:
+            print("│", " " * ((length - 24) // 2), "Пароль слишком длинный!", " " * ((length - 24) // 2), "│", sep="")
+        for i in range((width // 2), 1, -1):
+            print("│", " " * (length - 2), "│", sep="")
+        print("╰", "─" * (length - 2), "╯", sep="")
 
 
-if __name__ == "__main__":
-    menu = ['О нас', 'Услуги', 'Сертификаты', 'Мастера', 'Контакты', 'Выход']
-    MenuDisplay(menu)
+Window.printWelcome(21, 3)
+Window.printRegistrated(30, 3)
+Window.printPasswordIncorrect(20, 3)
+Window.printLoginTooLong(30, 3)
+Window.printPasswordTooLong(30, 3)
