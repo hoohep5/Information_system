@@ -1,6 +1,6 @@
 # import os
 import time
-import keyboard
+import typing
 #
 # welcome = """╭────────────────────────────╮
 #  │                            │
@@ -37,9 +37,23 @@ import keyboard
 #         os.system('cls')
 #         print(sign_up)
 #         time.sleep(2)
-procedures = ["massageyrtyrty", "z", "pilling", "massageyrtyrty", "z", "pilling"]
+procedures = ["massageyrtyrty", "z", "pilling", "massageyrtyrty", "pilling"]
 salons = ["svenlanskaya", "aleutskaya", "komsomolcskaya"]
-inp = ""
+session = {"login": "", "password": "", "screen": 1}
+
+
+def manager(user_session: dict):
+    global user_input
+    match user_session["screen"]:
+        case 1:  # was welcom
+            if user_input.isupper():
+                raise RuntimeError("Хули ты кричишь?")
+            user_session["screen"] = 2
+            return Window.print_sign_in
+        case _:
+            user_session["screen"] = 1
+            return Window.print_welcome
+
 class Window:
     # def __init__(self, frames, object1, object2, object3):
     #     self.frames = frames
@@ -49,152 +63,168 @@ class Window:
 
     # Основное окно
     @staticmethod
-    def printBasicWindow(length, width, back, title, list, inp_data):
-        print("╭", "─"*(length - 2), "╮", sep = "")
-        isTitled = False # Наличие загаловка
-        if back: # Проверка на наличие кнопки back
+    def print_basic_window(*, length: int, width: int, back: bool, title: str, received_list: list, inp_data: bool):
+        global user_input
+        print("╭", "─" * (length - 2), "╮", sep="")
+        is_titled = False  # Наличие заголовка
+        if back:  # Проверка на наличие кнопки back
             if (length % 2 == 0 and len(title) % 2 == 0) or (length % 2 != 0 and len(title) % 2 != 0):
-                print("│", " " * ((length - len(title) - 1) // 2), title, " " * ((length - len(title) - 1) // 2 - 6), "┌────┐", "│", sep = "")
+                print("│", " " * ((length - len(title) - 1) // 2), title, " " * ((length - len(title) - 1) // 2 - 6),
+                      "┌────┐", "│", sep="")
             else:
-                print("│", " " * ((length - len(title) - 1) // 2), title, " " * ((length - len(title) - 1) // 2 - 7), "┌────┐", "│", sep = "")
-            print("│", " " * (length - 8), "│Back│", "│", sep = "")
-            print("│", " " * (length - 8), "└────┘", "│", sep = "")
+                print("│", " " * ((length - len(title) - 1) // 2), title, " " * ((length - len(title) - 1) // 2 - 7),
+                      "┌────┐", "│", sep="")
+            print("│", " " * (length - 8), "│Back│", "│", sep="")
+            print("│", " " * (length - 8), "└────┘", "│", sep="")
             width -= 3
-            isTitled = True
-        if isTitled:
+            is_titled = True
+        if is_titled:
             # for i in range(width - 1, 1, -1):
             #     print("│", " " * (length - 2), "│", sep = "")
-            for j in list:
+            for j in received_list:
                 print("│", j, " " * ((length - 5) - len(j)), "│")
         else:
             if (length % 2 == 0 and len(title) % 2 == 0) or (length % 2 != 0 and len(title) % 2 != 0):
-                print("│", " " * ((length - len(title) - 1) // 2), title, " " * ((length - len(title) - 1) // 2), "│", sep = "")
+                print("│", " " * ((length - len(title) - 1) // 2), title, " " * ((length - len(title) - 1) // 2), "│",
+                      sep="")
             else:
-                print("│", " " * ((length - len(title) - 1) // 2), title, " " * ((length - len(title) - 1) // 2 - 1), "│", sep = "")
-            for j in list:
+                print("│", " " * ((length - len(title) - 1) // 2), title, " " * ((length - len(title) - 1) // 2 - 1),
+                      "│", sep="")
+            for j in received_list:
                 print("│", j, " " * ((length - 5) - len(j)), "│")
             # for i in range(width - 2, 1, -1):
             #     print("│", " " * (length - 2), "│", sep = "")
-        print("╰", "─" * (length - 2), "╯", sep = "")
-        if inp_data:
-            inp = input()
-
+        print("╰", "─" * (length - 2), "╯", sep="")
 
     # Окно регистрации
-    def printSignIn(length, width):
-        print("╭", "─" * (length - 2), "╮", sep = "")
+    @staticmethod
+    def print_sign_in(length, width):
+        global session
+        print("╭", "─" * (length - 2), "╮", sep="")
         for i in range((width // 2) - 1, 1, -1):
-            print("│", " " * (length - 2), "│", sep = "")
+            print("│", " " * (length - 2), "│", sep="")
         if length % 2 == 0:
-            print("│", " " * ((length - 14) // 2), "Введите логин", " " * ((length - 14) // 2 - 1), "│", sep = "")
-            print("│", " " * ((length - 9) // 2), "и пароль", " " * ((length - 9)//2), "│", sep = "")
+            print("│", " " * ((length - 14) // 2), "Введите логин", " " * ((length - 14) // 2 - 1), "│", sep="")
+            print("│", " " * ((length - 9) // 2), "и пароль", " " * ((length - 9) // 2), "│", sep="")
         else:
-            print("│", " " * ((length - 14) // 2), "Введите логин", " " * ((length - 14) // 2), "│", sep = "")
-            print("│", " " * ((length - 9) // 2), "и пароль", " " * ((length - 9) // 2 - 1), "│", sep = "")
+            print("│", " " * ((length - 14) // 2), "Введите логин", " " * ((length - 14) // 2), "│", sep="")
+            print("│", " " * ((length - 9) // 2), "и пароль", " " * ((length - 9) // 2 - 1), "│", sep="")
         for i in range((width // 2) - 1, 1, -1):
-            print("│", " " * (length - 2), "│", sep = "")
-        print("╰", "─" * (length - 2), "╯", sep = "")
-        login = input()
-        password = input()
+            print("│", " " * (length - 2), "│", sep="")
+        print("╰", "─" * (length - 2), "╯", sep="")
+        session["login"] = input()
+        session["password"] = input()
 
     # Приветственное окно
-    def printWelcome(length, width):
-        print("╭", "─" * (length - 2), "╮", sep = "")
+    @staticmethod
+    def print_welcome(length, width):
+        print("╭", "─" * (length - 2), "╮", sep="")
         for i in range((width // 2), 1, -1):
-            print("│", " " * (length - 2), "│", sep = "")
+            print("│", " " * (length - 2), "│", sep="")
         if length % 2 == 0:
-            print("│", " " * ((length - 18) // 2), "Добро пожаловать!", " " * ((length - 18) // 2 - 1), "│", sep = "")
+            print("│", " " * ((length - 18) // 2), "Добро пожаловать!", " " * ((length - 18) // 2 - 1), "│", sep="")
         else:
-            print("│", " " * ((length - 18) // 2), "Добро пожаловать!", " " * ((length - 18) // 2), "│", sep = "")
+            print("│", " " * ((length - 18) // 2), "Добро пожаловать!", " " * ((length - 18) // 2), "│", sep="")
         for i in range((width // 2), 1, -1):
-            print("│", " " * (length - 2), "│", sep = "")
-        print("╰", "─" * (length - 2), "╯", sep = "")
+            print("│", " " * (length - 2), "│", sep="")
+        print("╰", "─" * (length - 2), "╯", sep="")
 
     # Окно успешной регистрации
-    def printRegistrated(length, width):
-        print("╭", "─" * (length - 2), "╮", sep = "")
+    @staticmethod
+    def print_registrated(length, width):
+        print("╭", "─" * (length - 2), "╮", sep="")
         for i in range((width // 2), 1, -1):
-            print("│", " " * (length - 2), "│", sep = "")
+            print("│", " " * (length - 2), "│", sep="")
         if length % 2 == 0:
-            print("│", " " * ((length - 22) // 2), "Вы зарегистрировались", " " * ((length - 22) // 2 - 1), "│", sep = "")
+            print("│", " " * ((length - 22) // 2), "Вы зарегистрировались", " " * ((length - 22) // 2 - 1), "│", sep="")
         else:
-            print("│", " " * ((length - 22) // 2), "Вы зарегистрировались", " " * ((length - 22) // 2), "│", sep = "")
+            print("│", " " * ((length - 22) // 2), "Вы зарегистрировались", " " * ((length - 22) // 2), "│", sep="")
         for i in range((width // 2), 1, -1):
-            print("│", " " * (length - 2), "│", sep = "")
-        print("╰", "─" * (length - 2), "╯", sep = "")
+            print("│", " " * (length - 2), "│", sep="")
+        print("╰", "─" * (length - 2), "╯", sep="")
 
     # Ошибка: неверный пароль
-    def printPasswordIncorrect(length, width):
-        print("╭", "─" * (length - 2), "╮", sep = "")
+    @staticmethod
+    def print_password_incorrect(length, width):
+        print("╭", "─" * (length - 2), "╮", sep="")
         for i in range((width // 2), 1, -1):
-            print("│", " " * (length - 2), "│", sep = "")
+            print("│", " " * (length - 2), "│", sep="")
         if length % 2 == 0:
-            print("│", " " * ((length - 17) // 2), "Пароль неверный!", " " * ((length - 17) // 2), "│", sep = "")
+            print("│", " " * ((length - 17) // 2), "Пароль неверный!", " " * ((length - 17) // 2), "│", sep="")
         else:
-            print("│", " " * ((length - 17) // 2), "Пароль неверный!", " " * ((length - 17) // 2 - 1), "│", sep = "")
+            print("│", " " * ((length - 17) // 2), "Пароль неверный!", " " * ((length - 17) // 2 - 1), "│", sep="")
         for i in range((width // 2), 1, -1):
-            print("│", " " * (length - 2), "│", sep = "")
-        print("╰", "─" * (length - 2), "╯", sep = "")
+            print("│", " " * (length - 2), "│", sep="")
+        print("╰", "─" * (length - 2), "╯", sep="")
 
     # Ошибка: слишком длинный логин
-    def printLoginTooLong(length, width):
-        print("╭", "─" * (length - 2), "╮", sep = "")
+    @staticmethod
+    def print_login_too_long(length, width):
+        print("╭", "─" * (length - 2), "╮", sep="")
         for i in range((width // 2), 1, -1):
-            print("│", " " * (length - 2), "│", sep = "")
+            print("│", " " * (length - 2), "│", sep="")
         if length % 2 == 0:
-            print("│", " " * ((length - 23) // 2), "Логин слишком длинный!", " " * ((length - 23) // 2), "│", sep = "")
+            print("│", " " * ((length - 23) // 2), "Логин слишком длинный!", " " * ((length - 23) // 2), "│", sep="")
         else:
-            print("│", " " * ((length - 23) // 2), "Логин слишком длинный!", " " * ((length - 23) // 2 - 1), "│", sep = "")
+            print("│", " " * ((length - 23) // 2), "Логин слишком длинный!", " " * ((length - 23) // 2 - 1), "│",
+                  sep="")
         for i in range((width // 2), 1, -1):
-            print("│", " " * (length - 2), "│", sep = "")
-        print("╰", "─" * (length - 2), "╯",  sep = "")
+            print("│", " " * (length - 2), "│", sep="")
+        print("╰", "─" * (length - 2), "╯", sep="")
 
     # Ошибка: слишком длинный пароль
-    def printPasswordTooLong(length, width):
-        print("╭", "─" * (length - 2), "╮", sep = "")
+    @staticmethod
+    def print_password_too_long(length, width):
+        print("╭", "─" * (length - 2), "╮", sep="")
         for i in range((width // 2), 1, -1):
-            print("│", " " * (length - 2), "│", sep = "")
+            print("│", " " * (length - 2), "│", sep="")
         if length % 2 == 0:
-            print("│", " " * ((length - 24) // 2), "Пароль слишком длинный!", " " * ((length - 24) // 2 - 1), "│", sep = "")
+            print("│", " " * ((length - 24) // 2), "Пароль слишком длинный!", " " * ((length - 24) // 2 - 1), "│",
+                  sep="")
         else:
-            print("│", " " * ((length - 24) // 2), "Пароль слишком длинный!", " " * ((length - 24) // 2), "│", sep = "")
+            print("│", " " * ((length - 24) // 2), "Пароль слишком длинный!", " " * ((length - 24) // 2), "│", sep="")
         for i in range((width // 2), 1, -1):
-            print("│", " " * (length - 2), "│", sep = "")
-        print("╰", "─" * (length - 2), "╯", sep = "")
+            print("│", " " * (length - 2), "│", sep="")
+        print("╰", "─" * (length - 2), "╯", sep="")
 
     # Ошибка: время занято
-    def printTimeIsBusy(length, width):
-        print("╭", "─" * (length - 2), "╮", sep = "")
+    @staticmethod
+    def print_time_is_busy(length, width):
+        print("╭", "─" * (length - 2), "╮", sep="")
         for i in range((width // 2), 1, -1):
-            print("│", " " * (length - 2), "│", sep = "")
+            print("│", " " * (length - 2), "│", sep="")
         if length % 2 == 0:
-            print("│", " " * ((length - 22) // 2), "Это время уже занято!", " " * ((length - 22) // 2 - 1), "│", sep = "")
+            print("│", " " * ((length - 22) // 2), "Это время уже занято!", " " * ((length - 22) // 2 - 1), "│", sep="")
         else:
-            print("│", " " * ((length - 22) // 2), "Это время уже занято!", " " * ((length - 22) // 2), "│", sep = "")
+            print("│", " " * ((length - 22) // 2), "Это время уже занято!", " " * ((length - 22) // 2), "│", sep="")
         for i in range((width // 2), 1, -1):
-            print("│", " " * (length - 2), "│", sep = "")
-        print("╰", "─" * (length - 2), "╯", sep = "")
+            print("│", " " * (length - 2), "│", sep="")
+        print("╰", "─" * (length - 2), "╯", sep="")
 
     # Ошибка: введено неверное слово
-    def printIncorrectWord(length, width):
-        print("╭", "─" * (length - 2), "╮", sep = "")
+    @staticmethod
+    def print_input_error(length, width):
+        print("╭", "─" * (length - 2), "╮", sep="")
         for i in range((width // 2), 1, -1):
-            print("│", " " * (length - 2), "│", sep = "")
+            print("│", " " * (length - 2), "│", sep="")
         if length % 2 == 0:
-            print("│", " " * ((length - 13) // 2), "Ошибка ввода", " " * ((length - 13) // 2), "│", sep = "")
+            print("│", " " * ((length - 13) // 2), "Ошибка ввода", " " * ((length - 13) // 2), "│", sep="")
         else:
-            print("│", " " * ((length - 13) // 2), "Ошибка ввода", " " * ((length - 13) // 2 - 1), "│", sep = "")
+            print("│", " " * ((length - 13) // 2), "Ошибка ввода", " " * ((length - 13) // 2 - 1), "│", sep="")
         for i in range((width // 2), 1, -1):
-            print("│", " " * (length - 2), "│", sep = "")
-        print("╰", "─" * (length - 2), "╯", sep = "")
+            print("│", " " * (length - 2), "│", sep="")
+        print("╰", "─" * (length - 2), "╯", sep="")
 
-Window.printWelcome(20, 3)
-time.sleep(1)
+
 while True:
-    flag = True
-    Window.printSignIn(30,6)
-    if inp == "back":
-        flag = False
-    elif inp not in procedures:
-        Window.printIncorrectWord(20, 3)
+    foo = manager(session)
+    foo(20, 3)
+    if session["screen"] == 0:
+        exit(0)
+    user_input = input()
 
+
+# Window.print_welcome(20, 3)
+# time.sleep(1)
+# Window.print_sign_in(30, 6)
+# Window.print_basic_window(length=40, width=20, back=True, title="Выберите процедуру", received_list=procedures, inp_data=True)
