@@ -1,6 +1,7 @@
 # import os
 import time
 import typing
+
 #
 # welcome = """╭────────────────────────────╮
 #  │                            │
@@ -37,23 +38,23 @@ import typing
 #         os.system('cls')
 #         print(sign_up)
 #         time.sleep(2)
-procedures = ["massageyrtyrty", "z", "pilling", "massageyrtyrty", "pilling"]
+procedures = ["massage", "piling", "footmassage", "mashotstone"]
 salons = ["svenlanskaya", "aleutskaya", "komsomolcskaya"]
 session = {"login": "", "password": "", "screen": 1}
 
 
-def manager(user_session: dict):
-    global user_input
-    match user_session["screen"]:
-        case 1:  # was welcom
-            if user_input.isupper():
-                raise RuntimeError("Хули ты кричишь?")
-            user_session["screen"] = 2
-            return Window.print_sign_in
-        case _:
-            user_session["screen"] = 1
-            return Window.print_welcome
-
+# def manager(user_session: dict):
+#     global user_input
+#     match user_session["screen"]:
+#         case 1:  # was welcom
+#             user_session["screen"] = 2
+#             return Window.print_welcome(20,3)
+#         case 2:
+#             user_session["screen"] = 3
+#             return Window.print_sign_in(20,3)
+#         case 3:
+#             user_session["screen"] = 4
+#             return Window.print_basic_window(length=40, width=20, back=True, title="Выберите процедуру", received_list=procedures, inp_data=True)
 class Window:
     # def __init__(self, frames, object1, object2, object3):
     #     self.frames = frames
@@ -216,13 +217,40 @@ class Window:
         print("╰", "─" * (length - 2), "╯", sep="")
 
 
-while True:
-    foo = manager(session)
-    foo(20, 3)
-    if session["screen"] == 0:
-        exit(0)
-    user_input = input()
+# while True:
+#     foo = manager(session)
+#     if session["screen"] == 0:
+#         exit(0)
+#     user_input = input()
 
+
+# определяем список экранов
+screens = [1, 2, 3]
+
+# определяем переменную для хранения текущего индекса экрана
+current_screen = 0
+
+while True:
+    # выводим текущий экран
+    print(screens[current_screen])
+
+    # запрашиваем ввод пользователя
+    user_input = input(" ")
+
+    if user_input == "back":
+        # если пользователь ввел "back", то уменьшаем индекс экрана на 1
+        current_screen -= 1
+    else:
+        # если пользователь ввел что-то другое или ничего не ввел, то увеличиваем индекс экрана на 1
+        current_screen += 1
+
+    # проверяем, чтобы индекс экрана не выходил за границы списка
+    if current_screen < 0:
+        current_screen = 0
+    elif current_screen >= len(screens):
+        # если достигли конца списка, то завершаем программу
+        print("Program finished.")
+        break
 
 # Window.print_welcome(20, 3)
 # time.sleep(1)
