@@ -232,7 +232,14 @@ current_screen = 0
 
 while True:
     # выводим текущий экран
-    print(screens[current_screen])
+    if screens[current_screen] == 1:
+        Window.print_welcome(20, 3)
+    elif screens[current_screen] == 2:
+        Window.print_sign_in(30, 6)
+    elif screens[current_screen] == 3:
+        Window.print_basic_window(length=40, width=20, back=True, title="Выберите процедуру", received_list=procedures,
+                                 inp_data=True)
+#    print(screens[current_screen])
 
     # запрашиваем ввод пользователя
     user_input = input(" ")
