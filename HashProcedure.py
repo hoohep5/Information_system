@@ -38,10 +38,11 @@ class HashProcedure:
         self.save_in_file('HashProcedure.txt')
 
     def display_table(self):
+        list = []
         for i in range(self.size):
-            print(f"Bucket {i}:")
             for pair in self.table[i]:
-                print(f"  {pair[0]}: {pair[1]}, Price: {pair[2]}, Time: {pair[3]} ")
+                list.append(pair[0])
+        return list
 
     def search(self, key):
         index = self.hash_key_function(key)
@@ -66,3 +67,8 @@ class HashProcedure:
 
     def add_procedure(self, key, about, price, time):
         self.insert(key, about, price, time)
+
+
+hash_Procedure = HashProcedure(10)
+hash_Procedure.load_from_file('HashProcedure.txt')
+print(hash_Procedure.display_table())

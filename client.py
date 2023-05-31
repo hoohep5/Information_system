@@ -2,8 +2,10 @@ import socket
 import json
 import windows
 
-server_ip = '10.23.11.49'
-server_port = 5000
+#server_ip = '10.23.11.49'
+#server_port = 5000
+server_ip = '127.0.0.1'
+server_port = 2000
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect((server_ip, server_port))
@@ -26,6 +28,10 @@ if response == 'YOU ARE CONNECTED!':
                 'password': password
             }
 
+        elif request_type == 'procedures':
+            data = {
+                'request_type': request_type
+            }
 
         elif request_type == 'regist':
             key = input('Введите время: ')

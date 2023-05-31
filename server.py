@@ -2,18 +2,22 @@ import json
 import socket
 from threading import Thread
 
+import HashMaster
+import HashProcedure
 import HashTable
 import regist
 
 
 class Server:
 
-    def __init__(self, ip, port, hashtable, regist):
+    def __init__(self, ip, port, hashtable, regist, master, procedure):
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server.bind((ip, port))
         self.server.listen(1)
         self.hash_table = hashtable
         self.regist = regist
+        self.master = master
+        self.procedure = procedure
 
     def listen(self):
         while True:
@@ -48,6 +52,10 @@ class Server:
                     response = {result}
                     client_socket.send(json.dumps(response).encode('utf-8'))
 
+                elif data['request_type'] == 'procedures':
+                    result = self.procedure.display_table
+                    client_socket.send(json.dumps(response).encode('utf-8'))
+
                 elif data['request_type'] == 'regist':
                     key = data['key']
                     procedure = data['procedure']
@@ -70,9 +78,13 @@ class Server:
 if __name__ == '__main__':
     hash_table = HashTable.HashTable(10)
     regist_base = regist.Regist(10)
+    hash_master = HashMaster.HashMaster(10)
+    hash_Procedure = HashProcedure.HashProcedure(10)
     hash_table.load_from_file('HashUsers.txt')
     regist_base.load_from_file('regist.txt')
-    server = Server('10.23.11.49', 5000, hash_table, regist_base)
-    # server = Server('127.0.0.1', 2000, hash_table, regist_base) for win
+    hash_master.load_from_file('HashMaster.txt')
+    hash_Procedure.load_from_file('HashProcedure.txt')
+#    server = Server('10.23.11.49', 5000, hash_table, regist_base)
+    server = Server('127.0.0.1', 2000, hash_table, regist_base, hash_master, hash_Procedure)
     server.listen()
 
