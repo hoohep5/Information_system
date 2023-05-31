@@ -38,15 +38,14 @@ class Server:
                 if data['request_type'] == 'authorization':
                     key = data['key']
                     password = data['password']
-                    ip_address = client_address[0]
                     access_level = self.hash_table.verify_user(key, password)
-                    response = {'answer': access_level}
+                    response = {access_level}
                     client_socket.send(json.dumps(response).encode('utf-8'))
 
                 elif data['request_type'] == 'database':
                     request = data['request']
                     result = self.hash_table.get_user(request, client_address[0])
-                    response = {'answer': result}
+                    response = {result}
                     client_socket.send(json.dumps(response).encode('utf-8'))
 
                 elif data['request_type'] == 'regist':
@@ -62,8 +61,6 @@ class Server:
                         response = {f'Register': result}
                         client_socket.send(json.dumps(response).encode('utf-8'))
 
-                else:
-                    client_socket.send('UNKNOWN REQUEST!'.encode('utf-8'))
 
         except Exception as e:
             print(f'ERROR: {str(e)}')
@@ -75,7 +72,7 @@ if __name__ == '__main__':
     regist_base = regist.Regist(10)
     hash_table.load_from_file('HashUsers.txt')
     regist_base.load_from_file('regist.txt')
-    server = Server('127.0.0.1', 2000, hash_table, regist_base)
+    server = Server('10.23.11.49', 5000, hash_table, regist_base)
     # server = Server('127.0.0.1', 2000, hash_table, regist_base) for win
     server.listen()
 

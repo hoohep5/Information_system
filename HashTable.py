@@ -118,9 +118,9 @@ class HashTable:
 
         if hashed_password:
             return hashed_password == self.hash_pass_function(password)
-
         else:
             return False
+
 
 
 hash_table = HashTable(10)

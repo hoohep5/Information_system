@@ -113,8 +113,8 @@ class Window:
         for i in range((width // 2) - 1, 1, -1):
             print("│", " " * (length - 2), "│", sep="")
         print("╰", "─" * (length - 2), "╯", sep="")
-        session["login"] = input()
-        session["password"] = input()
+        # session["login"] = input()
+        # session["password"] = input()
 
     # Приветственное окно
     @staticmethod
@@ -137,9 +137,9 @@ class Window:
         for i in range((width // 2), 1, -1):
             print("│", " " * (length - 2), "│", sep="")
         if length % 2 == 0:
-            print("│", " " * ((length - 22) // 2), "Вы зарегистрировались", " " * ((length - 22) // 2 - 1), "│", sep="")
+            print("│", " " * ((length - 22) // 2), "Вы вошли в систему", " " * ((length - 22) // 2 - 1), "│", sep="")
         else:
-            print("│", " " * ((length - 22) // 2), "Вы зарегистрировались", " " * ((length - 22) // 2), "│", sep="")
+            print("│", " " * ((length - 22) // 2), "Вы вошли в систему", " " * ((length - 22) // 2), "│", sep="")
         for i in range((width // 2), 1, -1):
             print("│", " " * (length - 2), "│", sep="")
         print("╰", "─" * (length - 2), "╯", sep="")
@@ -188,6 +188,19 @@ class Window:
             print("│", " " * (length - 2), "│", sep="")
         print("╰", "─" * (length - 2), "╯", sep="")
 
+    @staticmethod
+    def print_regist_error(length, width):
+        print("╭", "─" * (length - 2), "╮", sep="")
+        for i in range((width // 2), 1, -1):
+            print("│", " " * (length - 2), "│", sep="")
+        if length % 2 == 0:
+            print("│", " " * ((length - 24) // 2), "неверный логин или пароль!", " " * ((length - 24) // 2 - 1), "│",
+                  sep="")
+        else:
+            print("│", " " * ((length - 24) // 2), "неверный логин или пароль!", " " * ((length - 24) // 2), "│", sep="")
+        for i in range((width // 2), 1, -1):
+            print("│", " " * (length - 2), "│", sep="")
+        print("╰", "─" * (length - 2), "╯", sep="")
     # Ошибка: время занято
     @staticmethod
     def print_time_is_busy(length, width):
@@ -209,14 +222,25 @@ class Window:
         for i in range((width // 2), 1, -1):
             print("│", " " * (length - 2), "│", sep="")
         if length % 2 == 0:
-            print("│", " " * ((length - 13) // 2), "Ошибка ввода", " " * ((length - 13) // 2), "│", sep="")
+            print("│", " " * ((length - 13) // 2), "Ошибка ввода!", " " * ((length - 13) // 2), "│", sep="")
         else:
-            print("│", " " * ((length - 13) // 2), "Ошибка ввода", " " * ((length - 13) // 2 - 1), "│", sep="")
+            print("│", " " * ((length - 13) // 2), "Ошибка ввода!", " " * ((length - 13) // 2 - 1), "│", sep="")
         for i in range((width // 2), 1, -1):
             print("│", " " * (length - 2), "│", sep="")
         print("╰", "─" * (length - 2), "╯", sep="")
 
-
+    @staticmethod
+    def print_connection_error(length, width):
+        print("╭", "─" * (length - 2), "╮", sep="")
+        for i in range((width // 2), 1, -1):
+            print("│", " " * (length - 2), "│", sep="")
+        if length % 2 == 0:
+            print("│", " " * ((length - 13) // 2), "Ошибка подключения", " " * ((length - 13) // 2), "│", sep="")
+        else:
+            print("│", " " * ((length - 13) // 2), "Ошибка подключения", " " * ((length - 13) // 2 - 1), "│", sep="")
+        for i in range((width // 2), 1, -1):
+            print("│", " " * (length - 2), "│", sep="")
+        print("╰", "─" * (length - 2), "╯", sep="")
 # while True:
 #     foo = manager(session)
 #     if session["screen"] == 0:
@@ -224,42 +248,42 @@ class Window:
 #     user_input = input()
 
 
-# определяем список экранов
-screens = [1, 2, 3]
-
-# определяем переменную для хранения текущего индекса экрана
-current_screen = 0
-
-while True:
-    # выводим текущий экран
-    if screens[current_screen] == 1:
-        Window.print_welcome(20, 3)
-    elif screens[current_screen] == 2:
-        Window.print_sign_in(30, 6)
-    elif screens[current_screen] == 3:
-        Window.print_basic_window(length=40, width=20, back=True, title="Выберите процедуру", received_list=procedures,
-                                 inp_data=True)
-#    print(screens[current_screen])
-
-    # запрашиваем ввод пользователя
-    user_input = input(" ")
-
-    if user_input == "back":
-        # если пользователь ввел "back", то уменьшаем индекс экрана на 1
-        current_screen -= 1
-    else:
-        # если пользователь ввел что-то другое или ничего не ввел, то увеличиваем индекс экрана на 1
-        current_screen += 1
-
-    # проверяем, чтобы индекс экрана не выходил за границы списка
-    if current_screen < 0:
-        current_screen = 0
-    elif current_screen >= len(screens):
-        # если достигли конца списка, то завершаем программу
-        print("Program finished.")
-        break
-
-# Window.print_welcome(20, 3)
-# time.sleep(1)
-# Window.print_sign_in(30, 6)
-# Window.print_basic_window(length=40, width=20, back=True, title="Выберите процедуру", received_list=procedures, inp_data=True)
+# # определяем список экранов
+# screens = [1, 2, 3]
+#
+# # определяем переменную для хранения текущего индекса экрана
+# current_screen = 0
+#
+# while True:
+#     # выводим текущий экран
+#     if screens[current_screen] == 1:
+#         Window.print_welcome(20, 3)
+#     elif screens[current_screen] == 2:
+#         Window.print_sign_in(30, 6)
+#     elif screens[current_screen] == 3:
+#         Window.print_basic_window(length=40, width=20, back=True, title="Выберите процедуру", received_list=procedures,
+#                                  inp_data=True)
+# #    print(screens[current_screen])
+#
+#     # запрашиваем ввод пользователя
+#     user_input = input(" ")
+#
+#     if user_input == "back":
+#         # если пользователь ввел "back", то уменьшаем индекс экрана на 1
+#         current_screen -= 1
+#     else:
+#         # если пользователь ввел что-то другое или ничего не ввел, то увеличиваем индекс экрана на 1
+#         current_screen += 1
+#
+#     # проверяем, чтобы индекс экрана не выходил за границы списка
+#     if current_screen < 0:
+#         current_screen = 0
+#     elif current_screen >= len(screens):
+#         # если достигли конца списка, то завершаем программу
+#         print("Program finished.")
+#         break
+#
+# # Window.print_welcome(20, 3)
+# # time.sleep(1)
+# # Window.print_sign_in(30, 6)
+# # Window.print_basic_window(length=40, width=20, back=True, title="Выберите процедуру", received_list=procedures, inp_data=True)
