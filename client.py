@@ -37,7 +37,7 @@ if response == 'YOU ARE CONNECTED!':
             key = input('Введите время: ')
             procedure = input('Введите процедуру: ')
             master = input('Введите мастера: ')
-            user = input('Введите имя: ')
+
             data = {
                 'request_type': request_type,
                 'key': key,
