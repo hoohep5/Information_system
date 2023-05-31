@@ -53,7 +53,8 @@ class Server:
                     client_socket.send(json.dumps(response).encode('utf-8'))
 
                 elif data['request_type'] == 'procedures':
-                    result = self.procedure.display_table
+                    key = self.procedure.display_table
+                    response ={key}
                     client_socket.send(json.dumps(response).encode('utf-8'))
 
                 elif data['request_type'] == 'regist':
